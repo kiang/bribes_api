@@ -33,7 +33,6 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                 <th><?php echo $this->Paginator->sort('Point.title', '公職名稱', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Point.candidate', '候選人', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Point.money', '每票單價', array('url' => $url)); ?></th>
-                <th><?php echo $this->Paginator->sort('Point.sess_id', '連線代碼', array('url' => $url)); ?></th>
                 <th><?php echo $this->Paginator->sort('Point.modified', '更新時間', array('url' => $url)); ?></th>
                 <th class="actions"><?php echo __('Action', true); ?></th>
             </tr>
@@ -53,11 +52,7 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                 if (empty($item['Issue']['id'])) {
                     echo '--';
                 } else {
-                    echo $this->Html->link($item['Issue']['id'], array(
-                        'controller' => 'issues',
-                        'action' => 'view',
-                        $item['Issue']['id']
-                    ));
+                    echo $this->Html->link($item['Issue']['fid'], 'https://law.judicial.gov.tw/FJUD/data.aspx?ty=JD&id=' . urlencode($item['Issue']['fid']), array('target' => '_blank'));
                 }
                         ?></td>
                     <?php endif; ?>
@@ -82,9 +77,6 @@ if (!empty($foreignId) && !empty($foreignModel)) {
                     ?></td>
                 <td><?php
                     echo $item['Point']['money'];
-                    ?></td>
-                <td><?php
-                    echo $item['Point']['sess_id'];
                     ?></td>
                 <td><?php
                     echo $item['Point']['modified'];

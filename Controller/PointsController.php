@@ -55,6 +55,7 @@ class PointsController extends AppController {
         }
         $this->set('scope', $scope);
         $this->paginate['Point']['limit'] = 20;
+        $this->paginate['Point']['contain'] = array('Issue');
         $items = $this->paginate($this->Point, $scope);
 
         $this->set('items', $items);
