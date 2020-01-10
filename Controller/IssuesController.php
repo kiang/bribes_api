@@ -35,12 +35,16 @@ class IssuesController extends AppController {
                     'limit' => 10,
                     'contain' => array(
                         'Point' => array(
+                            'fields' => array(
+                                'Issue_id', 'city', 'town', 'cunli', 'year', 'title', 'candidate',
+                                'money', 'modified',
+                            ),
                             'conditions' => array(
                                 'Point.round' => $currentRound['Issue']['round'],
                             ),
                         ),
                     ),
-        )));
+        )), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
         exit();
     }
 
