@@ -29,10 +29,7 @@ class IssuesController extends AppController {
                         'Issue.round' => $currentRound['Issue']['round'],
                     ),
                     'fields' => array('id', 'fid'),
-                    'order' => array(
-                        'Issue.date' => 'DESC',
-                    ),
-                    'limit' => 10,
+                    'order' => 'rand()',
                     'contain' => array(
                         'Point' => array(
                             'fields' => array(
