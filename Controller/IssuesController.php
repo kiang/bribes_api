@@ -48,7 +48,7 @@ class IssuesController extends AppController {
         $json = file_get_contents('php://input');
         $saveCount = 0;
         if (!empty($json)) {
-            $points = json_decode($json);
+            $points = json_decode($json, true);
             if (isset($points[0]['Issue_id'])) {
                 $issue = $this->Issue->read(null, $points[0]['Issue_id']);
             }
