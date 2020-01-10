@@ -24,7 +24,7 @@ class IssuesController extends AppController {
         ));
         header('Content-Type: application/json; charset=utf-8');
         header('Access-Control-Allow-Origin: *');
-        echo json_encode($this->Issue->find('all', array(
+        echo json_encode($this->Issue->find('first', array(
                     'conditions' => array(
                         'Issue.round' => $currentRound['Issue']['round'],
                     ),
