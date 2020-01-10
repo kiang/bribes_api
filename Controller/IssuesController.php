@@ -23,6 +23,7 @@ class IssuesController extends AppController {
             ),
         ));
         header('Content-Type: application/json; charset=utf-8');
+        header('Access-Control-Allow-Headers: *');
         header('Access-Control-Allow-Origin: *');
         echo json_encode($this->Issue->find('first', array(
                     'conditions' => array(
@@ -70,6 +71,7 @@ class IssuesController extends AppController {
                 $this->Issue->saveField('round', $round);
             }
         }
+        header('Access-Control-Allow-Headers: *');
         header('Content-Type: application/json; charset=utf-8');
         header('Access-Control-Allow-Origin: *');
         echo json_encode(array('saveCount' => $saveCount));
