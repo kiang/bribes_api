@@ -11,7 +11,7 @@ class IssuesController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         if (isset($this->Auth)) {
-            $this->Auth->allow('task');
+            $this->Auth->allow('task', 'save', 't');
         }
     }
 
@@ -24,22 +24,52 @@ class IssuesController extends AppController {
         ));
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($this->Issue->find('all', array(
-            'conditions' => array(
-                'Issue.round' => $currentRound['Issue']['round'],
-            ),
-            'fields' => array('id', 'fid'),
-            'order' => array(
-                'Issue.date' => 'DESC',
-            ),
-            'limit' => 10,
-            'contain' => array(
-                'Point' => array(
                     'conditions' => array(
-                        'Point.round' => $currentRound['Issue']['round'],
+                        'Issue.round' => $currentRound['Issue']['round'],
                     ),
-                ),
-            ),
+                    'fields' => array('id', 'fid'),
+                    'order' => array(
+                        'Issue.date' => 'DESC',
+                    ),
+                    'limit' => 10,
+                    'contain' => array(
+                        'Point' => array(
+                            'conditions' => array(
+                                'Point.round' => $currentRound['Issue']['round'],
+                            ),
+                        ),
+                    ),
         )));
+        exit();
+    }
+
+    function save() {
+        $json = file_get_contents('php://input');
+        $saveCount = 0;
+        if (!empty($json)) {
+            $points = json_decode($json);
+            if (isset($points[0]['Issue_id'])) {
+                $issue = $this->Issue->read(null, $points[0]['Issue_id']);
+            }
+            if (!empty($issue)) {
+                $sessID = $this->Session->id();
+                $round = $issue['Issue']['round'] + 1;
+                foreach ($points AS $point) {
+                    $point['round'] = $round;
+                    $point['sess_id'] = $sessID;
+                    $this->Issue->Point->create();
+                    if($this->Issue->Point->save($point)) {
+                        ++$saveCount;
+                    }
+                }
+            }
+            if($saveCount > 0) {
+                $this->Issue->id = $issue['Issue']['id'];
+                $this->Issue->saveField('round', $round);
+            }
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(array('saveCount' => $saveCount));
         exit();
     }
 
