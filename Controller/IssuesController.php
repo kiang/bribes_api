@@ -8,6 +8,41 @@ class IssuesController extends AppController {
     public $paginate = array();
     public $helpers = array();
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        if (isset($this->Auth)) {
+            $this->Auth->allow('task');
+        }
+    }
+
+    function task() {
+        $currentRound = $this->Issue->find('first', array(
+            'fields' => array('round'),
+            'order' => array(
+                'Issue.round' => 'ASC',
+            ),
+        ));
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($this->Issue->find('all', array(
+            'conditions' => array(
+                'Issue.round' => $currentRound['Issue']['round'],
+            ),
+            'fields' => array('id', 'fid'),
+            'order' => array(
+                'Issue.date' => 'DESC',
+            ),
+            'limit' => 10,
+            'contain' => array(
+                'Point' => array(
+                    'conditions' => array(
+                        'Point.round' => $currentRound['Issue']['round'],
+                    ),
+                ),
+            ),
+        )));
+        exit();
+    }
+
     function index() {
         $this->paginate['Issue'] = array(
             'limit' => 20,
