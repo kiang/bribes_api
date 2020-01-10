@@ -37,7 +37,7 @@ if (!isset($url)) {
             <tr<?php echo $class; ?>>
 
                 <td><?php
-                    echo $item['Issue']['fid'];
+                    echo $this->Html->link($item['Issue']['fid'], 'https://law.judicial.gov.tw/FJUD/data.aspx?ty=JD&id=' . urlencode($item['Issue']['fid']), array('target' => '_blank'));
                     ?></td>
                 <td><?php
                     echo $item['Issue']['date'];
